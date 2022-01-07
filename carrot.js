@@ -8,6 +8,8 @@ const restart = document.querySelectorAll('.restart');
 const carrots = document.querySelectorAll('.carrot');
 const bugs = document.querySelectorAll('.bug');
 const count = document.querySelector('.count');
+const field = document.querySelector('.play-field');
+const fieldRect = field.getBoundingClientRect();
 
 const bgm = new Audio('carrot/sound/bg.mp3');
 const carrotSound = new Audio('carrot/sound/carrot_pull.mp3');
@@ -19,7 +21,6 @@ let time = 9;
 let counting;
 let countCarrot = 10;
 
-
 const gameStart = () => {
     state = !state;
     playImgToggle();
@@ -30,14 +31,14 @@ const gameStart = () => {
         stopTimer();
         playSound(alertBgm);
         pauseSound(bgm);
-        replay.style.display = 'flex';
+        replay.style.display = 'block';
     }
 }
 
 const startTimer = () => {
     playSound(bgm);
     lost.style.display = 'none';
-    startBtn.style.display = 'block';
+    startBtn.style.visibility = 'visible';
     carrots.forEach(carrot => {
         carrot.style.display = 'inline';
         randomPosition(carrot);
@@ -53,19 +54,19 @@ const startTimer = () => {
         document.querySelector('.timer').innerHTML = `00:0${time}`;
         time--;
         if(time<0){
+            startBtn.style.visibility = 'hidden';
             clearInterval(counting);
             playSound(alertBgm);
             pauseSound(bgm);
             document.querySelector('.timer').innerHTML = 'Time Over';
             playImgToggle();
             time = 9;
-            startBtn.style.display = 'none';
-            lost.style.display = 'flex';
+            lost.style.display = 'block';
         };
     },1000); 
 };
 const stopTimer = () => {
-    startBtn.style.display = 'none';
+    startBtn.style.visibility = 'hidden';
     clearInterval(counting);
     time = 9;
 }
@@ -83,8 +84,8 @@ const rand = (min, max) => {
 }
 
 const randomPosition = (object) => {
-    positionX = rand(130,1250);
-    positionY = rand(350,520);
+    positionX = rand(0,fieldRect.width-80);
+    positionY = rand(0,fieldRect.height-80);
     object.style.top = `${positionY}px`;
     object.style.left = `${positionX}px`;
 }
@@ -109,10 +110,14 @@ restart.forEach(item => {
     });
 })
 
-carrots.forEach(carrot => {
-    carrot.addEventListener('click', () => {
+const onFieldClick = (e) => {
+    if(!state) {
+        return;
+    }
+    const target = e.target;
+    if(target.matches('.carrot')) {
         playSound(carrotSound);
-        carrot.style.display = 'none';
+        target.style.display = 'none';
         countCarrot--;
         count.textContent = countCarrot;
         if(countCarrot === 0) {
@@ -120,18 +125,16 @@ carrots.forEach(carrot => {
             stopTimer();
             pauseSound(bgm);
             playSound(winBgm);
-            won.style.display = 'flex';
-            
+            won.style.display = 'block';      
         }
-    })
-})
-
-bugs.forEach(bug => {
-    bug.addEventListener('click', () => {
+    } else if(target.matches('.bug')) {
         playSound(bugSound);
         pauseSound(bgm);
         state = !state;
         stopTimer();
-        lost.style.display = 'flex';
-    })
-})
+        lost.style.display = 'block';
+        
+    }
+}
+
+field.addEventListener('click', onFieldClick);

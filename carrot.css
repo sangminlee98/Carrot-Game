@@ -34,6 +34,10 @@ body {
   transition: all 0.3s ease-in;
 }
 
+.start {
+  visibility: visible;
+}
+
 .button:hover {
   transform: scale(1.1);
 }
@@ -48,6 +52,7 @@ body {
   border-radius: 10px;
   text-align: center;
   line-height: 50px;
+  user-select: none;
 }
 
 .count {
@@ -61,20 +66,34 @@ body {
   text-align: center;
   line-height: 50px;
   color: white;
+  user-select: none;
+}
+
+.play-field {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  margin-top: 160px;
 }
 
 .alert {
   display: none;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin-top: 150px;
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   background-color: rgba(0, 0, 0, 0.5);
   color: white;
   width: 30em;
   height: 10em;
   border-radius: 10px;
   z-index: 10;
+  user-select: none;
+  text-align: center;
+}
+
+.restart {
+  margin-top: 1em;
 }
 
 .result {
@@ -89,6 +108,7 @@ body {
   left: 1250px;
   cursor: pointer;
   transition: all 0.1s ease-in;
+  user-select: none;
 }
 
 .carrot:hover {
@@ -102,6 +122,7 @@ body {
   left: 1250px;
   cursor: pointer;
   transition: all 0.1s ease-in;
+  user-select: none;
 }
 
 .bug:hover {
