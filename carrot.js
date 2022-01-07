@@ -23,7 +23,6 @@ let countCarrot = 10;
 
 const gameStart = () => {
     state = !state;
-    playImgToggle();
     if(state) {
         document.querySelector('.timer').innerHTML = '00:10';
         startTimer(); 
@@ -33,6 +32,7 @@ const gameStart = () => {
         pauseSound(bgm);
         replay.style.display = 'block';
     }
+    playImgToggle();
 }
 
 const startTimer = () => {
@@ -98,18 +98,6 @@ const pauseSound = (sound) => {
     sound.pause();
 }
 
-startBtn.addEventListener('click', gameStart);
-
-restart.forEach(item => {
-    item.addEventListener('click', () => {
-        state = false;
-        gameStart();
-        alertBox.forEach(box => {
-            box.style.display = 'none';
-        })
-    });
-})
-
 const onFieldClick = (e) => {
     if(!state) {
         return;
@@ -136,5 +124,17 @@ const onFieldClick = (e) => {
         
     }
 }
+
+startBtn.addEventListener('click', gameStart);
+
+restart.forEach(item => {
+    item.addEventListener('click', () => {
+        state = false;
+        gameStart();
+        alertBox.forEach(box => {
+            box.style.display = 'none';
+        })
+    });
+})
 
 field.addEventListener('click', onFieldClick);
