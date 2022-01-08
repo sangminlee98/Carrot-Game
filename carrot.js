@@ -54,13 +54,12 @@ const startTimer = () => {
         document.querySelector('.timer').innerHTML = `00:0${time}`;
         time--;
         if(time<0){
-            startBtn.style.visibility = 'hidden';
-            clearInterval(counting);
+            state = !state;
+            stopTimer();
             playSound(alertBgm);
             pauseSound(bgm);
             document.querySelector('.timer').innerHTML = 'Time Over';
             playImgToggle();
-            time = 9;
             lost.style.display = 'block';
         };
     },1000); 
