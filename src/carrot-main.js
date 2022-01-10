@@ -1,19 +1,14 @@
 import Alert from './alert.js';
+import Field from './field.js';
 
 const startBtn = document.querySelector('.start');
 const timer = document.querySelector('.timer');
-
 const carrots = document.querySelectorAll('.carrot');
 const bugs = document.querySelectorAll('.bug');
-const count = document.querySelector('.count');
-const field = document.querySelector('.play-field');
-const fieldRect = field.getBoundingClientRect();
-
 const bgm = new Audio('carrot/sound/bg.mp3');
-const carrotSound = new Audio('carrot/sound/carrot_pull.mp3');
-const bugSound = new Audio('carrot/sound/bug_pull.mp3');
 const alertBgm = new Audio('carrot/sound/alert.wav');
 const winBgm = new Audio('carrot/sound/game_win.mp3');
+
 let state = false;
 let time = 9;
 let counting;
@@ -23,6 +18,7 @@ gameFinishBanner.setClickListener(() => {
     state = false;
     gameStart();
 })
+const field = new Field(countCarrot);
 
 const gameStart = () => {
     state = !state;
@@ -43,14 +39,14 @@ const startTimer = () => {
     startBtn.style.visibility = 'visible';
     carrots.forEach(carrot => {
         carrot.style.display = 'inline';
-        randomPosition(carrot);
+        field.randomPosition(carrot);
     });
     bugs.forEach(bug => {
         bug.style.display = 'inline';
-        randomPosition(bug);
+        field.randomPosition(bug);
     })
-    countCarrot = 10;
-    count.textContent = countCarrot;
+    field.initCount();
+    field.startCountText();
     state = true;
     counting = setInterval(() => {
         timer.innerHTML = `00:0${time}`;
@@ -80,17 +76,6 @@ const playImgToggle = () => {
     }
 }
 
-const rand = (min, max) => {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-const randomPosition = (object) => {
-    const positionX = rand(0,fieldRect.width-80);
-    const positionY = rand(0,fieldRect.height-80);
-    object.style.top = `${positionY}px`;
-    object.style.left = `${positionX}px`;
-}
-
 const playSound = (sound) => {
     sound.currentTime = 0;
     sound.play();
@@ -99,33 +84,23 @@ const pauseSound = (sound) => {
     sound.pause();
 }
 
-const onFieldClick = (e) => {
+const onItemClick = (item) => {
     if(!state) {
         return;
     }
-    const target = e.target;
-    if(target.matches('.carrot')) {
-        playSound(carrotSound);
-        target.style.display = 'none';
-        countCarrot--;
-        count.textContent = countCarrot;
-        if(countCarrot === 0) {
-            state = !state;
-            stopTimer();
-            pauseSound(bgm);
-            playSound(winBgm);
-            gameFinishBanner.wonShow();     
-        }
-    } else if(target.matches('.bug')) {
-        playSound(bugSound);
+    if(item === 'carrot') {
+        state = !state;
+        stopTimer();
+        pauseSound(bgm);
+        playSound(winBgm);
+        gameFinishBanner.wonShow();     
+    } 
+    if(item === 'bug') {
         pauseSound(bgm);
         state = !state;
         stopTimer();
-        gameFinishBanner.lostShow();
-        
+        gameFinishBanner.lostShow();   
     }
 }
-
+field.setClickListener(onItemClick);
 startBtn.addEventListener('click', gameStart);
-
-field.addEventListener('click', onFieldClick);
