@@ -1,13 +1,11 @@
 import Alert from './alert.js';
 import Field from './field.js';
+import * as sound from './sound.js';
 
 const startBtn = document.querySelector('.start');
 const timer = document.querySelector('.timer');
 const carrots = document.querySelectorAll('.carrot');
 const bugs = document.querySelectorAll('.bug');
-const bgm = new Audio('carrot/sound/bg.mp3');
-const alertBgm = new Audio('carrot/sound/alert.wav');
-const winBgm = new Audio('carrot/sound/game_win.mp3');
 
 let state = false;
 let time = 9;
@@ -27,15 +25,15 @@ const gameStart = () => {
         startTimer(); 
     } else {
         stopTimer();
-        playSound(alertBgm);
-        pauseSound(bgm);
+        sound.playAlert();
+        sound.pauseBgm();
         gameFinishBanner.replayShow();
     }
     playImgToggle();
 }
 
 const startTimer = () => {
-    playSound(bgm);
+    sound.playBgm();
     startBtn.style.visibility = 'visible';
     carrots.forEach(carrot => {
         carrot.style.display = 'inline';
@@ -54,8 +52,8 @@ const startTimer = () => {
         if(time<0){
             state = !state;
             stopTimer();
-            playSound(alertBgm);
-            pauseSound(bgm);
+            sound.playAlert();
+            sound.pauseBgm();
             timer.innerHTML = 'Time Over';
             playImgToggle();
             gameFinishBanner.lostShow();
@@ -76,14 +74,6 @@ const playImgToggle = () => {
     }
 }
 
-const playSound = (sound) => {
-    sound.currentTime = 0;
-    sound.play();
-}
-const pauseSound = (sound) => {
-    sound.pause();
-}
-
 const onItemClick = (item) => {
     if(!state) {
         return;
@@ -91,13 +81,13 @@ const onItemClick = (item) => {
     if(item === 'carrot') {
         state = !state;
         stopTimer();
-        pauseSound(bgm);
-        playSound(winBgm);
+        sound.pauseBgm();
+        sound.playWin();
         gameFinishBanner.wonShow();     
     } 
     if(item === 'bug') {
-        pauseSound(bgm);
         state = !state;
+        sound.pauseBgm();
         stopTimer();
         gameFinishBanner.lostShow();   
     }

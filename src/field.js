@@ -1,5 +1,5 @@
-const carrotSound = new Audio('carrot/sound/carrot_pull.mp3');
-const bugSound = new Audio('carrot/sound/bug_pull.mp3');
+import * as sound from './sound.js';
+
 export default class Field {
     constructor(countCarrot) {
         this.countCarrot = countCarrot;
@@ -20,7 +20,7 @@ export default class Field {
     onClick(e) {
         const target = e.target;
         if(target.matches('.carrot')) {
-            playSound(carrotSound);
+            sound.playCarrot();
             target.style.display = 'none';
             this.countCarrot--;
             this.count.textContent = this.countCarrot;
@@ -29,7 +29,7 @@ export default class Field {
                 this.countCarrot = 10;
             }
         } else if(target.matches('.bug')) {
-            playSound(bugSound);
+            sound.playBug();
             this.onItemClick && this.onItemClick('bug');
         }
     }
@@ -43,8 +43,4 @@ export default class Field {
 
 const rand = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-const playSound = (sound) => {
-    sound.currentTime = 0;
-    sound.play();
 }
