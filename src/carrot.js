@@ -24,7 +24,7 @@ let countCarrot = 10;
 const gameStart = () => {
     state = !state;
     if(state) {
-        document.querySelector('.timer').innerHTML = '00:10';
+        timer.innerHTML = '00:10';
         startTimer(); 
     } else {
         stopTimer();
@@ -37,7 +37,6 @@ const gameStart = () => {
 
 const startTimer = () => {
     playSound(bgm);
-    lost.style.display = 'none';
     startBtn.style.visibility = 'visible';
     carrots.forEach(carrot => {
         carrot.style.display = 'inline';
