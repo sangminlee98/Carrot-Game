@@ -1,6 +1,11 @@
 import Field from './field.js';
 import * as sound from './sound.js';
 
+export const Reason = Object.freeze({
+    pause: 'pause',
+    lost: 'lost',
+    won: 'won',
+})
 export default class Game {
     constructor() {
         this.startBtn = document.querySelector('.start');
@@ -28,7 +33,7 @@ export default class Game {
             sound.playAlert();
             sound.pauseBgm();
             this.state = false;
-            this.onGameStop && this.onGameStop('pause');
+            this.onGameStop && this.onGameStop(Reason.pause);
         }
         this.playImgToggle();
     }
@@ -56,7 +61,7 @@ export default class Game {
                 sound.pauseBgm();
                 this.timer.innerHTML = 'Time Over';
                 this.playImgToggle();
-                this.onGameStop && this.onGameStop('lost');
+                this.onGameStop && this.onGameStop(Reason.lost);
             };
         },1000); 
     };
@@ -81,13 +86,13 @@ export default class Game {
             this.stopTimer();
             sound.pauseBgm();
             sound.playWin();
-            this.onGameStop && this.onGameStop('won');    
+            this.onGameStop && this.onGameStop(Reason.won);    
         } 
         if(item === 'bug') {
             this.state = !this.state;
             sound.pauseBgm();
             this.stopTimer();
-            this.onGameStop && this.onGameStop('lost');
+            this.onGameStop && this.onGameStop(Reason.lost);
         }
     }
 }
