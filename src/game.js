@@ -64,6 +64,7 @@ class Game {
             sound.playAlert();
             sound.pauseBgm();
             this.state = false;
+            this.field.state = false;
             this.onGameStop && this.onGameStop(Reason.pause);
         }
         this.playImgToggle();
