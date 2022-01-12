@@ -3,9 +3,9 @@ import GameBuilder, { Reason } from './game.js';
 
 const gameFinishBanner = new Alert();
 const game = new GameBuilder()
-    .setCarrotCount(5)
-    .setBugCount(5)
-    .setDuration(7)
+    .setCarrotCount(10)
+    .setBugCount(15)
+    .setDuration(10)
     .build();
 gameFinishBanner.setClickListener(() => {
     game.start();

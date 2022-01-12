@@ -10,6 +10,7 @@ export default class Field {
         this.createObject(countCarrot,countBug);
         this.fieldRect = this.field.getBoundingClientRect();
         this.field.addEventListener('click', (event) => this.onClick(event));
+        this.state = true;
     };
     setClickListener(onItemClick) {
         this.onItemClick = onItemClick;
@@ -35,6 +36,9 @@ export default class Field {
         object.style.left = `${positionX}px`;
     }
     onClick(e) {
+        if(!this.state) {
+            return;
+        }
         const target = e.target;
         if(target.matches('.carrot')) {
             sound.playCarrot();

@@ -45,9 +45,13 @@ class Game {
     }
     setGameStopListener(onGameStop) {
         this.onGameStop = onGameStop;
+    };
+    get getState() {
+        return this.state;
     }
     start() {
         this.state = !this.state;
+        this.field.state = true;
         if(this.state) {
             if(this.time>=10) {
                 this.timer.textContent = `00:${this.time}`;
@@ -109,21 +113,20 @@ class Game {
         }
     };
     onItemClick = (item) => {
-        if(!this.state) {
-            return;
-        }
         if(item === 'carrot') {
             this.state = !this.state;
             this.stopTimer();
             sound.pauseBgm();
             sound.playWin();
-            this.onGameStop && this.onGameStop(Reason.won);    
+            this.onGameStop && this.onGameStop(Reason.won);
+            this.field.state = false;    
         } 
         if(item === 'bug') {
             this.state = !this.state;
             sound.pauseBgm();
             this.stopTimer();
             this.onGameStop && this.onGameStop(Reason.lost);
+            this.field.state = false;
         }
     }
 }
