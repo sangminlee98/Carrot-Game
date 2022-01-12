@@ -6,7 +6,6 @@ const game = new Game();
 gameFinishBanner.setClickListener(() => {
     game.start();
 })
-
 game.setGameStopListener(reason => {
     switch(reason) {
         case 'pause':
