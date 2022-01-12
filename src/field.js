@@ -1,15 +1,32 @@
 import * as sound from './sound.js';
 
 export default class Field {
-    constructor(countCarrot) {
+    constructor(countCarrot,countBug) {
         this.countCarrot = countCarrot;
+        this.initCountCarrot = countCarrot;
+        this.countBug = countBug;
         this.count = document.querySelector('.count');
         this.field = document.querySelector('.play-field');
+        this.createObject(countCarrot,countBug);
         this.fieldRect = this.field.getBoundingClientRect();
         this.field.addEventListener('click', (event) => this.onClick(event));
     };
     setClickListener(onItemClick) {
         this.onItemClick = onItemClick;
+    }
+    createObject(countCarrot,countBug) {
+        for(let i=0; i<countCarrot; i++) {
+            const item = document.createElement('img');
+            item.setAttribute('class','carrot');
+            item.setAttribute('src','../carrot/img/carrot.png');
+            this.field.appendChild(item);
+        };
+        for(let i=0; i<countBug; i++) {
+            const item = document.createElement('img');
+            item.setAttribute('class','bug');
+            item.setAttribute('src','../carrot/img/bug.png');
+            this.field.appendChild(item);
+        }
     }
     randomPosition(object) {
         const positionX = rand(0,this.fieldRect.width-80);
@@ -26,7 +43,7 @@ export default class Field {
             this.count.textContent = this.countCarrot;
             if(this.countCarrot === 0) {
                 this.onItemClick && this.onItemClick('carrot');
-                this.countCarrot = 10;
+                this.countCarrot = this.initCountCarrot;
             }
         } else if(target.matches('.bug')) {
             sound.playBug();
@@ -34,10 +51,10 @@ export default class Field {
         }
     }
     startCountText() {
-        this.count.textContent = 10;
+        this.count.textContent = this.initCountCarrot;
     }   
     initCount() {
-        this.countCarrot = 10;
+        this.countCarrot = this.initCountCarrot;
     }
 }
 

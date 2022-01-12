@@ -6,19 +6,42 @@ export const Reason = Object.freeze({
     lost: 'lost',
     won: 'won',
 })
-export default class Game {
-    constructor() {
+export default class GameBuilder {
+    setCarrotCount(num) {
+        this.countCarrot = num;
+        return this;
+    };
+    setBugCount(num) {
+        this.countBug = num;
+        return this;
+    };
+    setDuration(num) {
+        this.duration = num;
+        return this;
+    };
+    build() {
+        return new Game(
+            this.countCarrot,
+            this.countBug,
+            this.duration
+        );
+    }
+}
+class Game {
+    constructor(countCarrot, countBug, duration) {
+        this.state = false;
+        this.time = duration;
+        this.initTime = duration;
+        this.counting;
+        this.countCarrot = countCarrot;
+        this.countBug = countBug;
+        this.field = new Field(countCarrot, countBug);
+        this.field.setClickListener(this.onItemClick);
         this.startBtn = document.querySelector('.start');
         this.startBtn.addEventListener('click', () => this.start());
         this.timer = document.querySelector('.timer');
         this.carrots = document.querySelectorAll('.carrot');
         this.bugs = document.querySelectorAll('.bug');
-        this.state = false;
-        this.time = 9;
-        this.counting;
-        this.countCarrot = 10;
-        this.field = new Field(this.countCarrot);
-        this.field.setClickListener(this.onItemClick);
     }
     setGameStopListener(onGameStop) {
         this.onGameStop = onGameStop;
@@ -26,7 +49,11 @@ export default class Game {
     start() {
         this.state = !this.state;
         if(this.state) {
-            this.timer.innerHTML = '00:10';
+            if(this.time>=10) {
+                this.timer.textContent = `00:${this.time}`;
+            } else {
+                this.timer.innerHTML = `00:0${this.time}`;
+            } 
             this.startTimer();
         } else {
             this.stopTimer();
@@ -52,7 +79,11 @@ export default class Game {
         this.field.startCountText();
         this.state = true;
         this.counting = setInterval(() => {
-            this.timer.innerHTML = `00:0${this.time}`;
+            if(this.time-1>=10) {
+                this.timer.innerHTML = `00:${this.time-1}`; 
+            } else {
+                this.timer.innerHTML = `00:0${this.time-1}`;
+            }
             this.time--;
             if(this.time<0){
                 this.state = !this.state;
@@ -68,7 +99,7 @@ export default class Game {
     stopTimer() {
         this.startBtn.style.visibility = 'hidden';
         clearInterval(this.counting);
-        this.time = 9;
+        this.time = this.initTime;
     };
     playImgToggle() { 
         if(this.state) {

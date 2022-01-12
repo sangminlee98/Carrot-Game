@@ -1,8 +1,12 @@
 import Alert from './alert.js';
-import Game, { Reason } from './game.js';
+import GameBuilder, { Reason } from './game.js';
 
 const gameFinishBanner = new Alert();
-const game = new Game();
+const game = new GameBuilder()
+    .setCarrotCount(5)
+    .setBugCount(5)
+    .setDuration(7)
+    .build();
 gameFinishBanner.setClickListener(() => {
     game.start();
 })
